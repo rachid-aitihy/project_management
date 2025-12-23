@@ -1,0 +1,89 @@
+<div class="container mt-5" *ngIf="project">
+  
+  <div class="mb-5">
+    <a routerLink="/dashboard" class="text-decoration-none text-muted mb-2 d-inline-block">
+      &larr; Back to Dashboard
+    </a>
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <h1 class="fw-bold">{{ project.projectName }}</h1> <p class="text-muted lead">{{ project.projectDescription }}</p>
+      </div>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTaskModal">
+        + Add Task
+      </button>
+    </div>
+
+    <div class="card border-0 shadow-sm mt-3 p-3 bg-light">
+      <div class="d-flex justify-content-between fw-bold mb-2">
+        <span>Progress: {{ project.completedTasks }} / {{ project.totalTasks }} tasks completed</span>
+        <span>{{ project.progressPercentage | number:'1.0-0' }}%</span>
+      </div>
+      <div class="progress" style="height: 12px; border-radius: 6px;">
+        <div class="progress-bar bg-success" 
+             [style.width.%]="project.progressPercentage">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="fw-bold mb-3">Tasks</h3>
+  
+  <div *ngIf="!project.taskDTOS || project.taskDTOS.length === 0" class="alert alert-secondary">
+    No tasks yet. Create one to get started!
+  </div>
+
+  <div class="list-group shadow-sm" *ngIf="project.taskDTOS?.length > 0">
+    <div *ngFor="let task of project.taskDTOS" 
+         class="list-group-item p-3 d-flex align-items-center justify-content-between action-hover">
+      
+      <div class="d-flex align-items-center gap-3">
+        <input 
+          type="checkbox" 
+          class="form-check-input fs-4 m-0" 
+          [checked]="task.isCompleted"
+          (change)="markAsCompleted(task)"
+          style="cursor: pointer;">
+        
+        <div [class.text-decoration-line-through]="task.completed" [class.text-muted]="task.completed">
+          <h5 class="mb-0 fw-bold">{{ task.taskName }}</h5> <small class="text-muted">Due: {{ task.taskDueDate | date }}</small>
+        </div>
+      </div>
+
+      <button class="btn btn-outline-danger btn-sm rounded-circle" (click)="deleteTask(task.taskId)">
+        <i class="bi bi-trash"></i> 🗑️
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal fade" id="createTaskModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold">Add New Task</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" #closeTaskModalBtn></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="taskForm">
+          <div class="mb-3">
+            <label class="form-label">Task Title</label>
+            <input type="text" class="form-control" formControlName="taskName" placeholder="Ex: Database Design">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" formControlName="taskDescription" rows="2"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Due Date</label>
+            <input type="date" class="form-control" formControlName="taskDueDate">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-0">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary" (click)="addTask()" [disabled]="taskForm.invalid">Add Task</button>
+      </div>
+    </div>
+  </div>
+</div>
