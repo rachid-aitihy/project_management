@@ -8,13 +8,7 @@ A comprehensive full-stack application for efficient project and task management
 - [Technology Stack](#technology-stack)
 - [System Requirements](#system-requirements)
 - [Installation](#installation)
-- [Configuration](#configuration)
-- [Running the Application](#running-the-application)
-- [API Documentation](#api-documentation)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+
 
 ---
 
